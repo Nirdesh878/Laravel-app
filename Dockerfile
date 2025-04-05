@@ -38,7 +38,7 @@ RUN cp .env.example .env || true
 RUN php artisan key:generate || true
 
 # Clear caches to avoid config issues
-RUN php artisan config:clear && php artisan route:clear && php artisan view:clear
+RUN php artisan config:clear  && php artisan config:cache && php artisan route:clear && php artisan view:clear
 
 # Expose port
 EXPOSE 8000
