@@ -26,5 +26,10 @@ Route::post('/google-login', function (Request $request) {
     return response()->json(['user' => $user, 'token' => $token]);
 });
 
+Route::get('/test', function () {
+    return response()->json(['success' => true]);
+});
+
+
 
 

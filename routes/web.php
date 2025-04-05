@@ -49,6 +49,11 @@ Route::get('/test-db-connection', function () {
     }
 });
 
+Route::get('/debug', function () {
+    return phpinfo();
+});
+
+
 
 
 
