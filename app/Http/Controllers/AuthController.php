@@ -29,23 +29,41 @@ class AuthController extends Controller
         return response()->json(['message' => 'User registered successfully']);
     }
 
+    use Illuminate\Support\Facades\Hash;
+    use Illuminate\Support\Facades\Log;
+    
     public function login(Request $request)
     {
-
-        // print_r('hi');
-        // die;
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required'
-        ]);
-
-        $user = User::where('email', $request->email)->first();
-        if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages(['email' => 'Invalid credentialsssss']);
+        try {
+            Log::info('Login attempt: ' . $request->email);
+    
+            $request->validate([
+                'email' => 'required|email',
+                'password' => 'required'
+            ]);
+    
+            $user = User::where('email', $request->email)->first();
+    
+            if (!$user) {
+                Log::warning('User not found: ' . $request->email);
+                return response()->json(['error' => 'User not found'], 401);
+            }
+    
+            if (!Hash::check($request->password, $user->password)) {
+                Log::warning('Invalid password for user: ' . $request->email);
+                return response()->json(['error' => 'Invalid credentials'], 401);
+            }
+    
+            $token = $user->createToken('auth_token')->plainTextToken;
+            Log::info('Login success for: ' . $request->email);
+    
+            return response()->json(['token' => $token]);
+        } catch (\Exception $e) {
+            Log::error('Login error: ' . $e->getMessage());
+            return response()->json(['error' => 'Server Error'], 500);
         }
-
-        return response()->json(['token' => $user->createToken('auth_token')->plainTextToken]);
     }
+    
 
     public function user(Request $request)
     {
