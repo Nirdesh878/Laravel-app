@@ -32,8 +32,8 @@ class AuthController extends Controller
     public function login(Request $request)
     {
 
-        print_r('hi');
-        die;
+        // print_r('hi');
+        // die;
         $request->validate([
             'email' => 'required|email',
             'password' => 'required'
@@ -41,7 +41,7 @@ class AuthController extends Controller
 
         $user = User::where('email', $request->email)->first();
         if (!$user || !Hash::check($request->password, $user->password)) {
-            throw ValidationException::withMessages(['email' => 'Invalid credentials']);
+            throw ValidationException::withMessages(['email' => 'Invalid credentialsssss']);
         }
 
         return response()->json(['token' => $user->createToken('auth_token')->plainTextToken]);
