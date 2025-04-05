@@ -13,7 +13,6 @@ RUN apt-get update && apt-get install -y \
     git \
     vim \
     libzip-dev \
-    libmcrypt-dev \
     && docker-php-ext-install pdo_mysql mbstring zip exif pcntl
 
 # Install Composer
@@ -25,23 +24,23 @@ WORKDIR /var/www/html
 # Copy project files
 COPY . .
 
+# Remove .env to avoid hardcoded sqlite fallback
+RUN rm -f .env
+
 # Install PHP dependencies
 RUN composer install --optimize-autoloader --no-dev
 
 # Set Laravel permissions
 RUN chmod -R 775 storage bootstrap/cache
 
-# Create Laravel .env file if not exists (Render will override with env vars anyway)
-RUN cp .env.example .env || true
-
-# Generate app key (optional — will not crash if key is set via ENV)
-RUN php artisan key:generate || true
-
-# Clear caches to avoid config issues
-RUN php artisan config:clear  && php artisan config:cache && php artisan route:clear && php artisan view:clear
+# Clear and cache config using Render's ENV variables
+RUN php artisan config:clear \
+ && php artisan config:cache \
+ && php artisan route:clear \
+ && php artisan view:clear
 
 # Expose port
 EXPOSE 8000
 
-# Start Laravel with PHP's built-in server (acceptable for Render)
+# Start Laravel
 CMD php artisan serve --host=0.0.0.0 --port=8000
