@@ -36,4 +36,9 @@ Route::get('/db-test', function () {
     }
 });
 
+Route::get('/db-debug', function () {
+    return config('database');
+});
+
+
 
