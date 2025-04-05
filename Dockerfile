@@ -40,5 +40,7 @@ RUN php artisan config:clear && php artisan route:clear && php artisan view:clea
 # Expose port
 EXPOSE 8000
 
+RUN php artisan migrate --force || true
+
 # Start app
 CMD php artisan serve --host=0.0.0.0 --port=8000
