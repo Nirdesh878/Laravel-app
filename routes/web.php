@@ -26,3 +26,13 @@ Route::get('/logs', function () {
     return nl2br(e(File::get($logFile)));
 });
 
+Route::get('/db-test', function () {
+    try {
+        DB::connection()->getPdo();
+        return 'DB connected!';
+    } catch (\Exception $e) {
+        return $e->getMessage();
+    }
+});
+
+
