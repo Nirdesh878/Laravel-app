@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -36,6 +37,7 @@ class AuthController extends Controller
     {
         try {
             Log::info('Login attempt: ' . $request->email);
+           print_r('Login attempt: ' . $request->email);
     
             $request->validate([
                 'email' => 'required|email',
