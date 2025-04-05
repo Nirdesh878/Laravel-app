@@ -40,5 +40,15 @@ Route::get('/db-debug', function () {
     return config('database');
 });
 
+Route::get('/test-db-connection', function () {
+    try {
+        DB::connection()->getPdo();
+        return 'Connected to database successfully: ' . DB::connection()->getDatabaseName();
+    } catch (\Exception $e) {
+        return 'Database connection error: ' . $e->getMessage();
+    }
+});
+
+
 
 
