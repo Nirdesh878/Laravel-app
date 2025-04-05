@@ -12,8 +12,8 @@ class AuthController extends Controller
 {
     public function register(Request $request)
     {
-        // print_r('hi');
-        // die;
+        print_r('hi');
+        die;
         $request->validate([
             'name' => 'required|string',
             'email' => 'required|string|email|unique:users',
@@ -35,6 +35,8 @@ class AuthController extends Controller
     
     public function login(Request $request)
     {
+        print_r('hi');
+        die;
         try {
             Log::info('Login attempt: ' . $request->email);
            print_r('Login attempt: ' . $request->email);
