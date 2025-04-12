@@ -2,6 +2,9 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\LocationController;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use Illuminate\Http\Request;
 
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
@@ -19,11 +22,22 @@ Route::post('/google-login', function (Request $request) {
     $user = User::where('email', $request->email)->first();
 
     if (!$user) {
-        return response()->json(['message' => 'User not found. Please register.'], 404);
+        // Create new user for Google login
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => Hash::make(Str::random(24)), // Random password for Google users
+            'google_id' => $request->google_id,
+            'profile_picture' => $request->profile_picture
+        ]);
     }
 
     $token = $user->createToken('authToken')->plainTextToken;
-    return response()->json(['user' => $user, 'token' => $token]);
+    
+    return response()->json([
+        'user' => $user,
+        'token' => $token
+    ]);
 });
 
 Route::get('/test', function () {
