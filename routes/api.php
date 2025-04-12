@@ -32,7 +32,7 @@ Route::post('/google-login', function (Request $request) {
         ]);
     }
 
-    $token = $user->createToken('authToken')->plainTextToken;
+    $token = $user->createToken('authToken')->plainTextToken; 
     
     return response()->json([
         'user' => $user,
