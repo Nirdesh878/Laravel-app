@@ -38,9 +38,10 @@ class AuthController extends Controller
             'password' => 'required'
         ]);
 
+        
+        $user = User::where('email', $request->email)->first();
         print_r('hi');
         die;
-        $user = User::where('email', $request->email)->first();
         if (!$user || !Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages(['email' => 'Invalid credentials']);
         }
