@@ -53,6 +53,15 @@ Route::get('/debug', function () {
     return phpinfo();
 });
 
+Route::get('/debug-session', function() {
+    return [
+        'session_domain' => config('session.domain'),
+        'stateful_domains' => config('sanctum.stateful'),
+        'sanctum_guard' => config('sanctum.guard'),
+        'current_url' => request()->getHttpHost()
+    ];
+});
+
 
 
 
