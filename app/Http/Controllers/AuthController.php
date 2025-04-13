@@ -44,8 +44,8 @@ class AuthController extends Controller
         if (!$user || !Hash::check($request->password, $user->password)) {
             throw ValidationException::withMessages(['email' => 'Invalid credent']);
         }
-        print_r('hi');
-        die;
+        // print_r('hi');
+        // die;
 
         return response()->json(['token' => $user->createToken('auth_token')->plainTextToken]);
     }
